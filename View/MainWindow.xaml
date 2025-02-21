@@ -5,8 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Contacts" 
+        Height="375" 
+        Width="525"
+        Padding="15" 
+        Icon="/ContactsApp_96x96.ico">
+
+    <Grid Margin="15, 15, 15,15">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" MinHeight="34.04" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Edit Contact" Grid.Column="0" Margin="0,0,3,0">
+            <Grid Margin ="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Name:" Grid.Row="0"/>
+                <TextBox Margin="1" Grid.Row="1"/>
+                <TextBlock Text="Phone Number:" Grid.Row="2"/>
+                <TextBox Margin="1" Grid.Row="3" />
+                <TextBlock Text="Email:" Grid.Row="4"/>
+                <TextBox Grid.Row="5" Margin="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="18"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Read Contact" Grid.Column="1" Margin="0,0,4,0">
+            <Grid Margin ="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Name:" Grid.Row="0"/>
+                <TextBlock Text= "{Binding Name}" Grid.Row="1" Margin="2"/>
+                <TextBlock Text="Phone Number:" Grid.Row="2"/>
+                <TextBlock Text="{Binding PhoneNumber}" Grid.Row="3" Margin="2"/>
+                <TextBlock Text="Email:" Grid.Row="4"/>
+                <TextBlock Text="{Binding Email}" Grid.Row="5" Margin="2"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Height="31" Width="162">
+            <Button x:Name="saveButton" Content="Save" Height="25" Width="75" Margin="3"/>
+            <Button x:Name="loadButton" Content="Load" Height="25" Width="75" Margin="3"/>
+        </StackPanel>
 
     </Grid>
+
 </Window>
