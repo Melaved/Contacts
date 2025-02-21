@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 // TODO: Допилить  класс(добавить валидацию для свойств).
 namespace View.Model
@@ -33,7 +34,7 @@ namespace View.Model
                 return _name; 
             }
             set 
-            { 
+            {
                 _name = value; 
             }
         }
@@ -49,6 +50,11 @@ namespace View.Model
             }
             set
             {
+                if (value.ToString().Length != 11 || !value.ToString().StartsWith("7"))
+                {
+                    throw new ArgumentException(
+                        "Номер телефона должен состоять из 11 цифр и начинаться с 7.");
+                }
                 _phoneNumber = value;
             }
         }
@@ -64,7 +70,28 @@ namespace View.Model
             }
             set
             {
+                if (!IsValidEmail(value))
+                {
+                    throw new ArgumentException("Некорректный формат почты.");
+                }
                 _email = value;
+            }
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Используем регулярное выражение для проверки формата почты
+                var regex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+                return regex.IsMatch(email);
+            }
+            catch
+            {
+                return false;
             }
         }
 
