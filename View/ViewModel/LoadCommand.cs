@@ -4,31 +4,54 @@ using View.Model.Services;
 
 namespace View.ViewModel
 {
+    /// <summary>
+    /// Команда загрузки контакта.
+    /// </summary>
     public class LoadCommand : ICommand
     {
-        private readonly ContactSerializer _contactSerializer;
-        private readonly Action<Contact> _onContactLoaded;
+        /// <summary>
+        /// Инициализирует новый экземпляр команды <see cref="LoadCommand"/>.
+        /// </summary>
+        /// <param name="onContactLoaded">Делегат для передачи загруженного контакта в ViewModel.</param>
+        public LoadCommand(Action<Contact> onContactLoaded)
+        {
+            OnContactLoaded = onContactLoaded;
+        }
 
+        /// <summary>
+        /// Делегат, который устанавливает загруженный контакт в ViewModel.
+        /// Используется для обновления состояния объекта Contact.
+        /// </summary>
+        public Action<Contact> OnContactLoaded { get; }
+
+        /// <summary>
+        /// Событие, которое происходит при изменении возможности выполнения команды.
+        /// </summary>
         public event EventHandler? CanExecuteChanged;
 
-        public LoadCommand(ContactSerializer contactSerializer, Action<Contact> onContactLoaded)
-        {
-            _contactSerializer = contactSerializer;
-            _onContactLoaded = onContactLoaded;
-        }
-        public bool CanExecute(object? parameter)
-        {
-           return true;
-        }
-
+        /// <summary>
+        /// Выполняет команду загрузки контакта.
+        /// </summary>
+        /// <param name="parameter">Не используется.</param>
         public void Execute(object? parameter)
         {
-            var contact = _contactSerializer.LoadContact();
+            var contact = ContactSerializer.LoadContact();
 
-            if(contact != null)
+            if (contact != null)
             {
-                _onContactLoaded?.Invoke(contact);
+                OnContactLoaded?.Invoke(contact);
             }
         }
+
+        /// <summary>
+        /// Определяет, может ли команда выполняться.
+        /// </summary>
+        /// <param name="parameter">Не используется.</param>
+        /// <returns>Всегда возвращает true.</returns>
+        public bool CanExecute(object? parameter)
+        {
+            return true;
+        }
+
     }
 }

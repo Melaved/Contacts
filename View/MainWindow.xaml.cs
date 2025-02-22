@@ -4,14 +4,16 @@ using View.ViewModel;
 namespace View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Главное окно приложения.
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Инициализирует главное окно приложения и устанавливает контекст данных.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-
             DataContext = new MainVM();
         }
     }

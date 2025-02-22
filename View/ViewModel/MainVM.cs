@@ -1,37 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using View.Model;
-using View.Model.Services;
 
 namespace View.ViewModel
 {
+    /// <summary>
+    /// Класс для управления контактами и их сохранением и загрузкой.
+    /// </summary>
     public class MainVM : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Текущий контакт.
+        /// </summary>
         private Contact _contact;
-        private readonly ContactSerializer _contactSerializer;
 
+        /// <summary>
+        /// Создает новый экземпляр класса <see cref="MainVM"/>.
+        /// </summary>
+        public MainVM()
+        {
+            _contact = new Contact();
+            LoadCommand = new LoadCommand(loadContact => UpdateContact(loadContact));
+            SaveCommand = new SaveCommand(() => Contact);
+        }
+
+        /// <summary>
+        /// Событие, которое происходит при изменении свойства.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Вызывает событие <see cref="PropertyChanged"/>.
+        /// </summary>
+        /// <param name="propertyName">Имя измененного свойства.</param>
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Свойство для доступа к текущему контакту.
+        /// </summary>
         public Contact Contact
         {
-            get
-            {
-                return _contact;
-            }
+            get => _contact;
+            
             set
             {
                 _contact = value;
                 OnPropertyChanged(nameof(Contact));
             }
         }
+
+        /// <summary>
+        /// Свойство для доступа к имени контакта.
+        /// </summary>
         public string Name
         {
-            get 
-            {
-                return _contact.Name; 
-            }
+            get => _contact.Name;
+
             set
             {
                 _contact.Name = value;
@@ -39,12 +65,13 @@ namespace View.ViewModel
             }
         }
 
-        public int PhoneNumber
+        /// <summary>
+        /// Свойство для доступа к номеру телефона контакта.
+        /// </summary>
+        public string PhoneNumber
         {
-            get
-            {
-                return _contact.PhoneNumber;
-            }
+            get => _contact.PhoneNumber;
+            
             set
             {
                 _contact.PhoneNumber = value;
@@ -52,12 +79,13 @@ namespace View.ViewModel
             }
         }
 
+        /// <summary>
+        /// Свойство для доступа к почте контакта.
+        /// </summary>
         public string Email
         {
-            get
-            {
-                return _contact.Email;
-            }
+            get => _contact.Email;
+
             set
             {
                 _contact.Email = value;
@@ -65,10 +93,20 @@ namespace View.ViewModel
             }
         }
 
+        /// <summary>
+        /// Команда для загрузки контакта.
+        /// </summary>
         public LoadCommand LoadCommand { get; }
 
+        /// <summary>
+        /// Команда для сохранения контакта.
+        /// </summary>
         public SaveCommand SaveCommand { get; }
 
+        /// <summary>
+        /// Обновляет текущий контакт.
+        /// </summary>
+        /// <param name="contact">Загруженный контакт.</param>
         private void UpdateContact(Contact contact)
         {
             if (contact != null)
@@ -78,21 +116,6 @@ namespace View.ViewModel
                 OnPropertyChanged(nameof(PhoneNumber));
                 OnPropertyChanged(nameof(Email));
             }
-        }
-
-        public MainVM()
-        {
-            _contactSerializer = new ContactSerializer();
-            _contact = new Contact();
-            LoadCommand = new LoadCommand(_contactSerializer, loadContact => UpdateContact(loadContact));
-            SaveCommand = new SaveCommand(_contactSerializer, () => Contact);
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
