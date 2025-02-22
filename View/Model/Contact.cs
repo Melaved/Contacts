@@ -6,7 +6,7 @@
     public class Contact
     {
         /// <summary>
-        /// Конструктор класса. <see cref = "Contact"/>
+        /// Конструктор класса <see cref = "Contact"/>.
         /// </summary>
         /// <param name="name">Имя контакта.</param>
         /// <param name="phoneNumber">Номер телефона контакта.</param>
@@ -19,7 +19,7 @@
         }
 
         /// <summary>
-        /// Пустой конструктор класса. <see cref = "Contact"/>
+        /// Пустой конструктор класса <see cref = "Contact"/>.
         /// </summary>
         public Contact()
         {

@@ -52,6 +52,5 @@ namespace View.ViewModel
         {
             return true;
         }
-
     }
 }
