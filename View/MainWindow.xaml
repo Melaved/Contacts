@@ -1,12 +1,121 @@
-﻿<Window x:Class="View.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+﻿<Window
+    x:Class="View.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Contacts"
+    Width="525"
+    Height="375"
+    Padding="15"
+    Icon="/ContactsApp_96x96.ico"
+    mc:Ignorable="d">
+
+    <Grid Margin="15">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto" MinHeight="34.04"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox
+            Grid.Column="0"
+            Margin="0 0 3 0"
+            Header="Edit Contact">
+            <Grid Margin="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Name:"/>
+                <TextBox
+                    x:Name="nameTextBox"
+                    Grid.Row="1"
+                    Margin="1"
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="2" Text="Phone Number:"/>
+                <TextBox
+                    x:Name="phoneNumberTextBox"
+                    Grid.Row="3"
+                    Margin="1"
+                    Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="4" Text="Email:"/>
+                <TextBox
+                    x:Name="emailTextBox"
+                    Grid.Row="5"
+                    Height="18"
+                    Margin="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox
+            Grid.Column="1"
+            Margin="0 0 4 0"
+            Header="Read Contact">
+            <Grid Margin="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Name:"/>
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="2"
+                    Text="{Binding Name}"/>
+                <TextBlock Grid.Row="2" Text="Phone Number:"/>
+                <TextBlock
+                    Grid.Row="3"
+                    Margin="2"
+                    Text="{Binding PhoneNumber}"/>
+                <TextBlock Grid.Row="4" Text="Email:"/>
+                <TextBlock
+                    Grid.Row="5"
+                    Margin="2"
+                    Text="{Binding Email}"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="162"
+            Height="31"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal">
+            <Button
+                x:Name="saveButton"
+                Width="75"
+                Height="25"
+                Margin="3"                
+                Command="{Binding SaveCommand}"
+                Content="Save"/>
+
+            <Button
+                x:Name="loadButton"
+                Width="75"
+                Height="25"
+                Margin="3"
+                Command="{Binding LoadCommand}"
+                Content="Load"/>
+        </StackPanel>
 
     </Grid>
+
 </Window>
