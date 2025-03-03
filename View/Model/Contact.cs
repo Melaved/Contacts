@@ -1,9 +1,11 @@
-﻿namespace View.Model
+﻿using System.ComponentModel;
+
+namespace View.Model
 {
     /// <summary>
     /// Класс контакта, который хранит его имя, почту и номер телефона.
     /// </summary>
-    public class Contact
+    public class Contact : INotifyPropertyChanged
     {
         /// <summary>
         /// Конструктор класса <see cref = "Contact"/>.
@@ -28,20 +30,46 @@
             Email = string.Empty;
         }
 
-        /// <summary>
-        /// Возвращает и задает имя контакта.
-        /// </summary>
-        public string Name { get; set; }
+        private string _name;
+        private string _phoneNumber;
+        private string _email;
 
-        /// <summary>
-        /// Возвращает и задает телефонный номер контакта.
-        /// </summary>
-        public string PhoneNumber { get; set; } 
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
 
-        /// <summary>
-        /// Возвращает и задает почту контакта.
-        /// </summary>
-        public string Email { get; set; }
+        public string PhoneNumber
+        {
+            get => _phoneNumber;
+            set
+            {
+                _phoneNumber = value;
+                OnPropertyChanged(nameof(PhoneNumber));
+            }
+        }
+
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
     }
 }

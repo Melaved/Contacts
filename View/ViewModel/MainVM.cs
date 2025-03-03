@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
 using View.Model;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using View.Model.Services;
 
 namespace View.ViewModel
 {
@@ -11,16 +14,22 @@ namespace View.ViewModel
         /// <summary>
         /// Текущий контакт.
         /// </summary>
-        private Contact _contact;
+        private Contact _selectedContact;
+
+        private bool _isApplyButtonVisible;
+
+        public ObservableCollection<Contact> Contacts { get; set; } = new ObservableCollection<Contact>();
 
         /// <summary>
         /// Создает новый экземпляр класса <see cref="MainVM"/>.
         /// </summary>
         public MainVM()
         {
-            _contact = new Contact();
-            LoadCommand = new LoadCommand(loadContact => UpdateContact(loadContact));
-            SaveCommand = new SaveCommand(() => Contact);
+            Contacts = new ObservableCollection<Contact>(ContactSerializer.LoadContacts());
+            AddCommand = new RelayCommand(AddContact, CanAddContact);
+            EditCommand = new RelayCommand(EditContact, CanEditContact);
+            RemoveCommand = new RelayCommand(RemoveContact, CanRemoveContact);
+            ApplyCommand = new RelayCommand(ApplyContact, CanApplyContact);
         }
 
         /// <summary>
@@ -40,82 +49,84 @@ namespace View.ViewModel
         /// <summary>
         /// Свойство для доступа к текущему контакту.
         /// </summary>
-        public Contact Contact
+        public Contact SelectedContact
         {
-            get => _contact;
+            get => _selectedContact;
             
             set
             {
-                _contact = value;
-                OnPropertyChanged(nameof(Contact));
+                _selectedContact = value;
+                OnPropertyChanged(nameof(SelectedContact));
+                OnPropertyChanged(nameof(IsContactSelected));
+                OnPropertyChanged(nameof(IsApplyButtonVisible));
             }
         }
 
-        /// <summary>
-        /// Свойство для доступа к имени контакта.
-        /// </summary>
-        public string Name
+        public bool IsApplyButtonVisible
         {
-            get => _contact.Name;
-
+            get => _isApplyButtonVisible;
             set
             {
-                _contact.Name = value;
-                OnPropertyChanged(nameof(Name));
+                _isApplyButtonVisible = value;
+                OnPropertyChanged(nameof(IsApplyButtonVisible));
             }
         }
 
-        /// <summary>
-        /// Свойство для доступа к номеру телефона контакта.
-        /// </summary>
-        public string PhoneNumber
+        public bool IsContactSelected => _selectedContact != null;
+
+        public ICommand AddCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand RemoveCommand { get; }
+        public ICommand ApplyCommand { get; }
+
+        public void AddContact(object parameter)
         {
-            get => _contact.PhoneNumber;
-            
-            set
-            {
-                _contact.PhoneNumber = value;
-                OnPropertyChanged(nameof(PhoneNumber));
-            }
+            SelectedContact = new Contact();
+            IsApplyButtonVisible = true;
         }
 
-        /// <summary>
-        /// Свойство для доступа к почте контакта.
-        /// </summary>
-        public string Email
+        public void EditContact(object parameter)
         {
-            get => _contact.Email;
-
-            set
-            {
-                _contact.Email = value;
-                OnPropertyChanged(nameof(Email));
-            }
+            IsApplyButtonVisible = true;
         }
 
-        /// <summary>
-        /// Команда для загрузки контакта.
-        /// </summary>
-        public LoadCommand LoadCommand { get; }
-
-        /// <summary>
-        /// Команда для сохранения контакта.
-        /// </summary>
-        public SaveCommand SaveCommand { get; }
-
-        /// <summary>
-        /// Обновляет текущий контакт.
-        /// </summary>
-        /// <param name="contact">Загруженный контакт.</param>
-        private void UpdateContact(Contact contact)
+        public void RemoveContact(object parameter)
         {
-            if (contact != null)
+            if (SelectedContact != null)
             {
-                Contact = contact;
-                OnPropertyChanged(nameof(Name));
-                OnPropertyChanged(nameof(PhoneNumber));
-                OnPropertyChanged(nameof(Email));
+                int index = Contacts.IndexOf(SelectedContact);
+                Contacts.Remove(SelectedContact);
+
+                if (Contacts.Any())
+                {
+                    SelectedContact = index < Contacts.Count ? Contacts[index] : Contacts.Last();
+                }
+                else
+                {
+                    SelectedContact = null;
+                }
+                ContactSerializer.SaveContacts(Contacts);
             }
         }
+
+        public void ApplyContact(object parameter)
+        {
+            if (SelectedContact != null)
+            {
+                if (Contacts.Contains(SelectedContact))
+                {
+                    Contacts.Add(SelectedContact);
+                }
+                IsApplyButtonVisible = false;
+                ContactSerializer.SaveContacts(Contacts);
+            }
+        }
+
+        private bool CanAddContact(object parameter) => !IsApplyButtonVisible;
+
+        private bool CanEditContact(object parameter) => IsContactSelected && !IsApplyButtonVisible;
+
+        private bool CanRemoveContact(object parameter) => IsContactSelected && !IsApplyButtonVisible;
+        private bool CanApplyContact(object parameter) => IsApplyButtonVisible;
     }
 }

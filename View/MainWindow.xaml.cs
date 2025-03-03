@@ -17,6 +17,5 @@ namespace View
             DataContext = new MainVM();
         }
 
-
     }
 }
