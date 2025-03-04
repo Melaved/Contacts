@@ -8,7 +8,22 @@ namespace View.Model
     public class Contact : INotifyPropertyChanged
     {
         /// <summary>
-        /// Конструктор класса <see cref = "Contact"/>.
+        /// Имя контакта.
+        /// </summary>
+        private string _name;
+
+        /// <summary>
+        /// Номер телефона контакта.
+        /// </summary>
+        private string _phoneNumber;
+
+        /// <summary>
+        /// Почта контакта.
+        /// </summary>
+        private string _email;
+
+        /// <summary>
+        /// Конструктор класса <see cref="Contact"/>.
         /// </summary>
         /// <param name="name">Имя контакта.</param>
         /// <param name="phoneNumber">Номер телефона контакта.</param>
@@ -21,19 +36,23 @@ namespace View.Model
         }
 
         /// <summary>
-        /// Пустой конструктор класса <see cref = "Contact"/>.
+        /// Пустой конструктор класса <see cref="Contact"/>.
         /// </summary>
         public Contact()
         {
-            Name =string.Empty;
+            Name = string.Empty;
             PhoneNumber = string.Empty;
             Email = string.Empty;
         }
 
-        private string _name;
-        private string _phoneNumber;
-        private string _email;
+        /// <summary>
+        /// Событие, которое происходит при изменении свойства.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Получает или задает имя контакта.
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -44,6 +63,9 @@ namespace View.Model
             }
         }
 
+        /// <summary>
+        /// Получает или задает номер телефона контакта.
+        /// </summary>
         public string PhoneNumber
         {
             get => _phoneNumber;
@@ -54,6 +76,9 @@ namespace View.Model
             }
         }
 
+        /// <summary>
+        /// Получает или задает почту контакта.
+        /// </summary>
         public string Email
         {
             get => _email;
@@ -64,12 +89,13 @@ namespace View.Model
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        /// <summary>
+        /// Вызывает событие <see cref="PropertyChanged"/> при изменении свойства.
+        /// </summary>
+        /// <param name="propertyName">Имя измененного свойства.</param>
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }
