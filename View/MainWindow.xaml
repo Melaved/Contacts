@@ -9,8 +9,10 @@
     xmlns:model="clr-namespace:View.Model"
     xmlns:viewmodel="clr-namespace:View.ViewModel"
     Title="Contacts"
-    Width="525"
+    Width="500"
     Height="375"
+    MinWidth="500"
+    MinHeight="300"
     Padding="15"
     d:DataContext="{d:DesignInstance Type=model:Contact}"
     Icon="\Resources\ContactsApp_96x96.ico"
@@ -118,6 +120,9 @@
 
         <!--  Правая панель  -->
         <Grid Grid.Column="2" Margin="8">
+            <Grid.BindingGroup>
+                <BindingGroup x:Name="ContactBindingGroup"/>
+            </Grid.BindingGroup>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
@@ -198,9 +203,8 @@
                 Margin="0 50 0 0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="Button_Click"
                 Command="{Binding ApplyCommand}"
-                CommandParameter="{Binding ElementName=MainGrid}"
+                CommandParameter="{Binding ElementName=ContactBindingGroup}"
                 Content="Apply"
                 Visibility="{Binding IsApplyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>

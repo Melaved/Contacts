@@ -17,20 +17,5 @@ namespace View
             DataContext = new MainVM();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var nameExpression = NameTextBox.GetBindingExpression(TextBox.TextProperty);
-            var phoneExpression = PhoneNumberTextBox.GetBindingExpression(TextBox.TextProperty);
-            var emailExpression = EmailTextBox.GetBindingExpression(TextBox.TextProperty);
-
-            nameExpression?.UpdateSource();
-            phoneExpression?.UpdateSource();
-            emailExpression?.UpdateSource();
-
-            if (DataContext is MainVM ViewModel)
-            {
-                ViewModel.ApplyContact(null);
-            }
-        }
     }
 }

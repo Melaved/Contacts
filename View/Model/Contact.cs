@@ -51,7 +51,7 @@ namespace View.Model
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Получает или задает имя контакта.
+        /// Возвращает и задает имя контакта.
         /// </summary>
         public string Name
         {
@@ -64,7 +64,7 @@ namespace View.Model
         }
 
         /// <summary>
-        /// Получает или задает номер телефона контакта.
+        /// Возвращает и задает номер телефона контакта.
         /// </summary>
         public string PhoneNumber
         {
@@ -77,7 +77,7 @@ namespace View.Model
         }
 
         /// <summary>
-        /// Получает или задает почту контакта.
+        /// Возвращает и задает почту контакта.
         /// </summary>
         public string Email
         {

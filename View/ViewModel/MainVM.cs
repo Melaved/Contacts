@@ -5,7 +5,6 @@ using View.Model.Services;
 using View.Model;
 using View.ViewModel;
 using System.Windows.Data;
-using System.Windows.Controls;
 
 /// <summary>
 /// Представляет ViewModel для главного окна приложения.
@@ -28,19 +27,9 @@ public class MainVM : INotifyPropertyChanged
     private bool _isEditMode;
 
     /// <summary>
-    /// Значение, указывающее, добавляется ли новый контакт.
-    /// </summary>
-    private bool _isAddingNewContact;
-
-    /// <summary>
     /// Значение, указывающее, редактируется ли контакт.
     /// </summary>
     private bool _isEditingContact;
-
-    /// <summary>
-    /// Коллекция контактов, отображаемых в главном окне.
-    /// </summary>
-    public ObservableCollection<Contact> Contacts { get; set; } = new ObservableCollection<Contact>();
 
     /// <summary>
     /// Инициализирует новый экземпляр класса <see cref="MainVM"/>.
@@ -60,29 +49,13 @@ public class MainVM : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <summary>
-    /// Вызывает событие <see cref="PropertyChanged"/> для указанного свойства.
-    /// </summary>
-    /// <param name="propertyName">Имя измененного свойства.</param>
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    /// <summary>
-    /// Получает или задает выбранный контакт.
+    /// Возвращает и задает выбранный контакт.
     /// </summary>
     public Contact SelectedContact
     {
         get => _selectedContact;
         set
         {
-            if (_isAddingNewContact && value != null)
-            {
-                _isAddingNewContact = false;
-                IsApplyButtonVisible = false;
-                IsEditMode = false;
-                OnPropertyChanged(nameof(IsAddingNewContact));
-            }
 
             if (_isEditingContact && value != null)
             {
@@ -100,7 +73,7 @@ public class MainVM : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Получает или задает значение, указывающее, видна ли кнопка "Применить".
+    /// Возвращает и задаетт значение, указывающее, видна ли кнопка "Применить".
     /// </summary>
     public bool IsApplyButtonVisible
     {
@@ -113,7 +86,7 @@ public class MainVM : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Получает или задает значение, указывающее, находится ли приложение в режиме редактирования.
+    /// ПВозвращает и задает, указывающее, находится ли приложение в режиме редактирования.
     /// </summary>
     public bool IsEditMode
     {
@@ -126,20 +99,7 @@ public class MainVM : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Получает или задает значение, указывающее, добавляется ли новый контакт.
-    /// </summary>
-    public bool IsAddingNewContact
-    {
-        get => _isAddingNewContact;
-        set
-        {
-            _isAddingNewContact = value;
-            OnPropertyChanged(nameof(IsAddingNewContact));
-        }
-    }
-
-    /// <summary>
-    /// Получает или задает значение, указывающее, редактируется ли контакт.
+    /// Возвращает и задает, указывающее, редактируется ли контакт.
     /// </summary>
     public bool IsEditingContact
     {
@@ -152,7 +112,7 @@ public class MainVM : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Получает значение, указывающее, выбран ли контакт.
+    /// Возвращает и задает, указывающее, выбран ли контакт.
     /// </summary>
     public bool IsContactSelected => _selectedContact != null;
 
@@ -177,6 +137,11 @@ public class MainVM : INotifyPropertyChanged
     public ICommand ApplyCommand { get; }
 
     /// <summary>
+    /// Коллекция контактов, отображаемых в главном окне.
+    /// </summary>
+    public ObservableCollection<Contact> Contacts { get; set; } = [];
+
+    /// <summary>
     /// Добавляет новый контакт.
     /// </summary>
     /// <param name="parameter">Параметр команды.</param>
@@ -186,7 +151,7 @@ public class MainVM : INotifyPropertyChanged
         SelectedContact = new Contact();
         IsApplyButtonVisible = true;
         IsEditMode = true;
-        IsAddingNewContact = true;
+        IsEditingContact = true;
     }
 
     /// <summary>
@@ -219,6 +184,7 @@ public class MainVM : INotifyPropertyChanged
             {
                 SelectedContact = null;
             }
+
             ContactSerializer.SaveContacts(Contacts);
         }
     }
@@ -229,19 +195,32 @@ public class MainVM : INotifyPropertyChanged
     /// <param name="parameter">Параметр команды.</param>
     public void ApplyContact(object parameter)
     {
-        if (SelectedContact != null)
+        if (parameter is BindingGroup bindingGroup)
         {
-            if (!Contacts.Contains(SelectedContact))
-            {
-                Contacts.Add(SelectedContact);
-            }
+            bindingGroup.CommitEdit();
 
-            IsApplyButtonVisible = false;
-            IsEditMode = false;
-            IsAddingNewContact = false;
-            IsEditingContact = false;
-            ContactSerializer.SaveContacts(Contacts);
+            if (SelectedContact != null)
+            {
+                if (!Contacts.Contains(SelectedContact))
+                {
+                    Contacts.Add(SelectedContact);
+                }
+
+                IsApplyButtonVisible = false;
+                IsEditMode = false;           
+                IsEditingContact = false;
+                ContactSerializer.SaveContacts(Contacts);
+            }
         }
+    }
+
+    /// <summary>
+    /// Вызывает событие <see cref="PropertyChanged"/> для указанного свойства.
+    /// </summary>
+    /// <param name="propertyName">Имя измененного свойства.</param>
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
     /// <summary>

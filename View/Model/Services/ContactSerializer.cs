@@ -28,7 +28,7 @@ namespace View.Model.Services
         /// </summary>
         /// <returns>
         /// Возвращает список контактов, если файл существует и успешно десериализован.
-        /// В противном случае возвращает пустой список.
+        /// В противном случае возвращает пустой список.</returns>
         public static List<Contact> LoadContacts()
         {
             if (File.Exists(FilePath))
@@ -36,6 +36,7 @@ namespace View.Model.Services
                 var json = File.ReadAllText(FilePath);
                 return JsonSerializer.Deserialize<List<Contact>>(json);
             }
+
             return new List<Contact>();
         }
     }
