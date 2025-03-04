@@ -5,8 +5,8 @@ namespace View.ViewModel
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute; // Делегат для выполнения команды
-        private readonly Predicate<object> _canExecute; // Делегат для проверки возможности выполнения команды
+        private readonly Action<object> _execute; 
+        private readonly Predicate<object> _canExecute; 
 
         /// <summary>
         /// Конструктор команды.
@@ -15,7 +15,7 @@ namespace View.ViewModel
         /// <param name="canExecute">Метод, который проверяет, можно ли выполнить команду.</param>
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute)); // Проверка на null
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute)); 
             _canExecute = canExecute;
         }
 

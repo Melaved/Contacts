@@ -6,17 +6,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:View.Model"
     xmlns:viewmodel="clr-namespace:View.ViewModel"
     Title="Contacts"
     Width="525"
     Height="375"
     Padding="15"
-    d:DataContext="{d:DesignInstance Type=viewmodel:MainVM}"
+    d:DataContext="{d:DesignInstance Type=model:Contact}"
     Icon="\Resources\ContactsApp_96x96.ico"
     mc:Ignorable="d">
 
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -56,16 +58,16 @@
 
             <!--  Список контактов с прокруткой  -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <ListView
+                <ListBox
                     Margin="0 8 0 8"
                     ItemsSource="{Binding Contacts}"
                     SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
-                    <ListView.ItemTemplate>
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Margin="3" Text="{Binding Name}"/>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </ScrollViewer>
 
             <!--  Кнопки управления  -->
@@ -148,12 +150,14 @@
                 VerticalAlignment="Center"
                 Text="Name:"/>
             <TextBox
+                x:Name="NameTextBox"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Text="{Binding SelectedContact.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                IsReadOnly="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
+                Text="{Binding SelectedContact.Name, UpdateSourceTrigger=Explicit}"/>
 
             <TextBlock
                 Grid.Row="2"
@@ -161,12 +165,14 @@
                 VerticalAlignment="Center"
                 Text="Phone Number:"/>
             <TextBox
+                x:Name="PhoneNumberTextBox"
                 Grid.Row="3"
                 Grid.Column="1"
                 Margin="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Text="{Binding SelectedContact.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                IsReadOnly="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
+                Text="{Binding SelectedContact.PhoneNumber, UpdateSourceTrigger=Explicit}"/>
 
             <TextBlock
                 Grid.Row="4"
@@ -174,12 +180,14 @@
                 VerticalAlignment="Center"
                 Text="Email:"/>
             <TextBox
+                x:Name="EmailTextBox"
                 Grid.Row="5"
                 Grid.Column="1"
                 Margin="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Text="{Binding SelectedContact.Email, UpdateSourceTrigger=PropertyChanged}"/>
+                IsReadOnly="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
+                Text="{Binding SelectedContact.Email, UpdateSourceTrigger=Explicit}"/>
 
             <!--  Кнопка Apply  -->
             <Button
@@ -190,7 +198,9 @@
                 Margin="0 50 0 0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                Click="Button_Click"
                 Command="{Binding ApplyCommand}"
+                CommandParameter="{Binding ElementName=MainGrid}"
                 Content="Apply"
                 Visibility="{Binding IsApplyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
