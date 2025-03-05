@@ -171,22 +171,24 @@ public class MainVM : INotifyPropertyChanged
     /// <param name="parameter">Параметр команды.</param>
     public void RemoveContact(object parameter)
     {
-        if (SelectedContact != null)
+        if (SelectedContact == null)
         {
-            int index = Contacts.IndexOf(SelectedContact);
-            Contacts.Remove(SelectedContact);
-
-            if (Contacts.Any())
-            {
-                SelectedContact = index < Contacts.Count ? Contacts[index] : Contacts.Last();
-            }
-            else
-            {
-                SelectedContact = null;
-            }
-
-            ContactSerializer.SaveContacts(Contacts);
+            return;
         }
+
+        int index = Contacts.IndexOf(SelectedContact);
+        Contacts.Remove(SelectedContact);
+
+        if (Contacts.Any())
+        {
+            SelectedContact = index < Contacts.Count ? Contacts[index] : Contacts.Last();
+        }
+        else
+        {
+            SelectedContact = null;
+        }
+
+        ContactSerializer.SaveContacts(Contacts);
     }
 
     /// <summary>
@@ -195,23 +197,27 @@ public class MainVM : INotifyPropertyChanged
     /// <param name="parameter">Параметр команды.</param>
     public void ApplyContact(object parameter)
     {
-        if (parameter is BindingGroup bindingGroup)
+        if (parameter is not BindingGroup bindingGroup)
         {
-            bindingGroup.CommitEdit();
-
-            if (SelectedContact != null)
-            {
-                if (!Contacts.Contains(SelectedContact))
-                {
-                    Contacts.Add(SelectedContact);
-                }
-
-                IsApplyButtonVisible = false;
-                IsEditMode = false;       
-                IsEditingContact = false;
-                ContactSerializer.SaveContacts(Contacts);
-            }
+            return;
         }
+
+        bindingGroup.CommitEdit();
+
+        if (SelectedContact == null)
+        {
+            return;
+        }
+
+        if (!Contacts.Contains(SelectedContact))
+        {
+            Contacts.Add(SelectedContact);
+        }
+
+        IsApplyButtonVisible = false;
+        IsEditMode = false;
+        IsEditingContact = false;
+        ContactSerializer.SaveContacts(Contacts);
     }
 
     /// <summary>
