@@ -11,7 +11,18 @@ namespace View.Model.Services
         /// <summary>
         /// Путь к файлу, в который сохраняются контакты.
         /// </summary>
-        private static readonly string _filePath = "contacts.json";
+        private static readonly string _filePath;
+
+        /// <summary>
+        /// Статический конструктор для инициализации пути к файлу.
+        /// </summary>
+        static ContactSerializer()
+        {
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var contactsFolder = Path.Combine(appDataPath, "Contacts");
+            Directory.CreateDirectory(contactsFolder);
+            _filePath = Path.Combine(contactsFolder, "contacts.json");
+        }
 
         /// <summary>
         /// Сохраняет список контактов в файл в формате JSON.
