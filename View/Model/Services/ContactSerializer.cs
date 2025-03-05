@@ -11,7 +11,7 @@ namespace View.Model.Services
         /// <summary>
         /// Путь к файлу, в который сохраняются контакты.
         /// </summary>
-        private static readonly string FilePath = "contacts.json";
+        private static readonly string _filePath = "contacts.json";
 
         /// <summary>
         /// Сохраняет список контактов в файл в формате JSON.
@@ -20,7 +20,7 @@ namespace View.Model.Services
         public static void SaveContacts(IEnumerable<Contact> contacts)
         {
             var json = JsonConvert.SerializeObject(contacts, Formatting.Indented);
-            File.WriteAllText(FilePath, json);
+            File.WriteAllText(_filePath, json);
         }
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace View.Model.Services
         /// </returns>
         public static List<Contact> LoadContacts()
         {
-            if (File.Exists(FilePath))
+            if (File.Exists(_filePath))
             {
-                var json = File.ReadAllText(FilePath);
+                var json = File.ReadAllText(_filePath);
                 return JsonConvert.DeserializeObject<List<Contact>>(json);
             }
 
