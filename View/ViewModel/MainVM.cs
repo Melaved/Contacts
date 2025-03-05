@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
-using View.Model.Services;
-using View.Model;
-using View.ViewModel;
 using System.Windows.Data;
+using System.Windows.Input;
+using View.Model;
+using View.Model.Services;
+using View.ViewModel;
 
 /// <summary>
 /// Представляет ViewModel для главного окна приложения.
@@ -207,7 +207,7 @@ public class MainVM : INotifyPropertyChanged
                 }
 
                 IsApplyButtonVisible = false;
-                IsEditMode = false;           
+                IsEditMode = false;       
                 IsEditingContact = false;
                 ContactSerializer.SaveContacts(Contacts);
             }

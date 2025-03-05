@@ -2,6 +2,11 @@
 
 namespace View.ViewModel
 {
+    /// <summary>
+    /// Реализация интерфейса <see cref="ICommand"/>,
+    /// которая позволяет передавать делегаты для методов выполнения
+    /// и проверки возможности выполнения команды.
+    /// </summary>
     public class RelayCommand : ICommand
     {
         /// <summary>

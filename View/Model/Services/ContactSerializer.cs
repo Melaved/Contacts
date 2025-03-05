@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace View.Model.Services
 {
@@ -19,7 +19,7 @@ namespace View.Model.Services
         /// <param name="contacts">Список контактов для сохранения.</param>
         public static void SaveContacts(IEnumerable<Contact> contacts)
         {
-            var json = JsonSerializer.Serialize(contacts);
+            var json = JsonConvert.SerializeObject(contacts, Formatting.Indented);
             File.WriteAllText(FilePath, json);
         }
 
@@ -28,13 +28,14 @@ namespace View.Model.Services
         /// </summary>
         /// <returns>
         /// Возвращает список контактов, если файл существует и успешно десериализован.
-        /// В противном случае возвращает пустой список.</returns>
+        /// В противном случае возвращает пустой список.
+        /// </returns>
         public static List<Contact> LoadContacts()
         {
             if (File.Exists(FilePath))
             {
                 var json = File.ReadAllText(FilePath);
-                return JsonSerializer.Deserialize<List<Contact>>(json);
+                return JsonConvert.DeserializeObject<List<Contact>>(json);
             }
 
             return new List<Contact>();
