@@ -41,7 +41,7 @@ namespace View.Converters
         /// <summary>
         /// Преобразует значение обратно из <see cref="Visibility"/> в <see cref="bool"/>.
         /// </summary>
-        /// <param name="value">Значение типа <see cref="Visibility"/>, 
+        /// <param name="value">Значение типа <see cref="Visibility"/>,
         /// которое необходимо преобразовать обратно.</param>
         /// <param name="targetType">Тип целевого свойства (не используется).</param>
         /// <param name="parameter">Дополнительный параметр (не используется).</param>
@@ -53,8 +53,8 @@ namespace View.Converters
         /// <exception cref="NotImplementedException">Метод не реализован.</exception>
         public object ConvertBack(
             object value,
-            Type targetType, 
-            object parameter, 
+            Type targetType,
+            object parameter,
             CultureInfo culture)
         {
             throw new NotImplementedException();

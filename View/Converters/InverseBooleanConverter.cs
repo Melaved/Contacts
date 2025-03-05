@@ -22,7 +22,7 @@ namespace View.Converters
         /// В противном случае возвращает исходное значение <paramref name="value"/>.
         /// </returns>
         public object Convert(
-            object value, 
+            object value,
             Type targetType,
             object parameter,
             CultureInfo culture)
@@ -50,7 +50,7 @@ namespace View.Converters
         /// </returns>
         public object ConvertBack(
             object value,
-            Type targetType, 
+            Type targetType,
             object parameter,
             CultureInfo culture)
         {
