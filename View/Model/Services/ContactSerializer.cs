@@ -4,59 +4,52 @@ using Newtonsoft.Json;
 namespace View.Model.Services
 {
     /// <summary>
-    /// Статический класс для сериализации и десериализации контактов.
+    /// Предоставляет методы для сериализации и десериализации списка контактов в формате JSON.
     /// </summary>
     public static class ContactSerializer
     {
         /// <summary>
-        /// Статический конструктор для инициализации пути к файлу и создания каталога.
+        /// Путь к файлу, в который сохраняются контакты.
+        /// </summary>
+        private static readonly string _filePath;
+
+        /// <summary>
+        /// Статический конструктор для инициализации пути к файлу.
         /// </summary>
         static ContactSerializer()
         {
-            FilePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "Contacts",
-                "contacts.json"
-            );
-
-            Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var contactsFolder = Path.Combine(appDataPath, "Contacts");
+            Directory.CreateDirectory(contactsFolder);
+            _filePath = Path.Combine(contactsFolder, "contacts.json");
         }
 
         /// <summary>
-        /// Путь к файлу, в котором хранятся контакты.
+        /// Сохраняет список контактов в файл в формате JSON.
         /// </summary>
-        public static string FilePath { get; }
-
-        /// <summary>
-        /// Сохраняет контакт в файл.
-        /// </summary>
-        /// <param name="contact">Объект контакта для сохранения.</param>
-        /// <exception cref="ArgumentNullException">Контакт не может быть пустым</exception>
-        public static void SaveContact(Contact contact)
+        /// <param name="contacts">Список контактов для сохранения.</param>
+        public static void SaveContacts(IEnumerable<Contact> contacts)
         {
-            if (contact == null)
-            {
-                throw new ArgumentNullException(nameof(contact) + "Контакт не может быть пустым");
-            }
-
-            string json = JsonConvert.SerializeObject(contact, Formatting.Indented);
-            File.WriteAllText(FilePath, json);
+            var json = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+            File.WriteAllText(_filePath, json);
         }
 
         /// <summary>
-        /// Загружает контакт из файла.
+        /// Загружает список контактов из файла JSON.
         /// </summary>
-        /// <returns>Объект <see cref="Contact"/>, если файл существует, иначе null.</returns>
-        public static Contact LoadContact()
+        /// <returns>
+        /// Возвращает список контактов, если файл существует и успешно десериализован.
+        /// В противном случае возвращает пустой список.
+        /// </returns>
+        public static List<Contact> LoadContacts()
         {
-            if (!File.Exists(FilePath))
+            if (File.Exists(_filePath))
             {
-                return null;
+                var json = File.ReadAllText(_filePath);
+                return JsonConvert.DeserializeObject<List<Contact>>(json);
             }
 
-            string json = File.ReadAllText(FilePath);
-            Contact contact = JsonConvert.DeserializeObject<Contact>(json);
-            return contact;
+            return new List<Contact>();
         }
     }
 }
