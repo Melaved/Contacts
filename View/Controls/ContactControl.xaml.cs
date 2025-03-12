@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using View.Model;
@@ -31,7 +30,7 @@ namespace View.Controls
             var textBox = sender as TextBox;
             var newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
 
-            if (!Contact.StrictPhoneNumberRegex.IsMatch(newText))
+            if (!Contact.PhoneNumberMask.IsMatch(newText))
             {
                 e.Handled = true;
             }
@@ -52,7 +51,7 @@ namespace View.Controls
             }
 
             var text = (string)e.DataObject.GetData(typeof(string));
-            if (!Contact.StrictPhoneNumberRegex.IsMatch(text))
+            if (!Contact.PhoneNumberRegex.IsMatch(text))
             {
                 e.CancelCommand();
             }

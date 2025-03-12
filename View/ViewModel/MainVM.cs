@@ -48,7 +48,6 @@ namespace View.ViewModel
 
                 _selectedContact = value;
                 OnPropertyChanged(nameof(SelectedContact));
-
                 EditingContact = _selectedContact?.Clone();
                 if (EditingContact != null)
                 {
@@ -149,13 +148,15 @@ namespace View.ViewModel
         /// </summary>
         private void EditContact(object parameter)
         {
-            if (SelectedContact != null)
+            if (SelectedContact == null)
             {
-                EditingContact = SelectedContact.Clone();
-                EditingContact.IsEditing = true;
-                EditingContact.IsNewContact = false;
-                OnPropertyChanged(nameof(EditingContact));
+                return;
             }
+
+            EditingContact = SelectedContact.Clone();
+            EditingContact.IsEditing = true;
+            EditingContact.IsNewContact = false;
+            OnPropertyChanged(nameof(EditingContact));
         }
 
         /// <summary>
@@ -163,12 +164,14 @@ namespace View.ViewModel
         /// </summary>
         private void RemoveContact(object parameter)
         {
-            if (SelectedContact != null)
+            if (SelectedContact == null)
             {
-                Contacts.Remove(SelectedContact);
-                ContactSerializer.SaveContacts(Contacts);
-                SelectedContact = Contacts.Count > 0 ? Contacts[0] : null;
+                return;
             }
+
+            Contacts.Remove(SelectedContact);
+            ContactSerializer.SaveContacts(Contacts);
+            SelectedContact = Contacts.Count > 0 ? Contacts[0] : null;
         }
 
         /// <summary>
@@ -177,7 +180,9 @@ namespace View.ViewModel
         private void ApplyChanges(object parameter)
         {
             if (EditingContact == null || EditingContact.HasErrors)
+            {
                 return;
+            }
 
             if (EditingContact.IsNewContact)
             {

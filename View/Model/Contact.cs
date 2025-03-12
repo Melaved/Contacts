@@ -25,10 +25,21 @@ namespace View.Model
         private const int MaxEmailLength = 100;
 
         /// <summary>
+        /// Регулярное выражение для маски номера телефона.
+        /// </summary>
+        public static readonly Regex PhoneNumberMask = new Regex(@"^[0-9+() -]*$");
+
+        /// <summary>
         /// Регулярное выражение для проверки номера телефона.
         /// </summary>
-        public static readonly Regex SimplePhoneNumberRegex = new Regex(@"^[0-9+() -]*$");
-        public static readonly Regex StrictPhoneNumberRegex = new Regex(@"^\+?(\d{1,3})?[-. (]*(\d{1,4})[-. )]*(\d{1,4})[-. ]*(\d{1,9})$");
+        public static readonly Regex PhoneNumberRegex = new Regex
+            (@"^\+?(\d{1,3})?[-. (]*(\d{1,4})[-. )]*(\d{1,4})[-. ]*(\d{1,9})$");
+
+        /// <summary>
+        /// Регулярное выражение для проверки электронной почты.
+        /// </summary>
+        public static readonly Regex EmailRegex = new Regex(
+            @"^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$");
 
         /// <summary>
         /// Словарь ошибок данных.
@@ -192,10 +203,11 @@ namespace View.Model
         private void ValidatePhoneNumber()
         {
             if (PhoneNumber.Length > MaxPhoneNumberLength
-                || !Contact.StrictPhoneNumberRegex.IsMatch(PhoneNumber))
+                || !PhoneNumberRegex.IsMatch(PhoneNumber))
             {
-                _errors[nameof(PhoneNumber)] = $"Номер телефона должен быть в формате '+7 (999) 123-45-67' "
-                                               + $"и не превышать {MaxPhoneNumberLength} символов.";
+                _errors[nameof(Email)] = $"Электронная почта должна содержать '@', " +
+                                         $"иметь корректный формат и не превышать " +
+                                         $"{MaxEmailLength} символов.";
             }
             else
             {
@@ -211,11 +223,11 @@ namespace View.Model
         private void ValidateEmail()
         {
             if (Email.Length > MaxEmailLength
-                || !Regex.IsMatch(Email, @"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+"))
+                || !EmailRegex.IsMatch(Email))
             {
-                _errors[nameof(Email)] = $"Электронная почта должна содержать '@', "
-                                         + $"иметь корректный формат и не превышать "
-                                         + $"{MaxEmailLength} символов.";
+                _errors[nameof(PhoneNumber)] = $"Номер телефона должен быть в формате " +
+                                               $"'+7 (999) 123-45-67' и не превышать " +
+                                               $"{MaxPhoneNumberLength} символов.";
             }
             else
             {
