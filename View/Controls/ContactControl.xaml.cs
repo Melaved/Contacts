@@ -29,7 +29,6 @@ namespace View.Controls
         {
             var textBox = sender as TextBox;
             var newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
-
             if (!Contact.PhoneNumberMask.IsMatch(newText))
             {
                 e.Handled = true;

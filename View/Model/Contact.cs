@@ -32,14 +32,14 @@ namespace View.Model
         /// <summary>
         /// Регулярное выражение для проверки номера телефона.
         /// </summary>
-        public static readonly Regex PhoneNumberRegex = new Regex
-            (@"^\+?(\d{1,3})?[-. (]*(\d{1,4})[-. )]*(\d{1,4})[-. ]*(\d{1,9})$");
+        public static readonly Regex PhoneNumberRegex =
+            new Regex(@"^\+?(\d{1,3})?[-. (]*(\d{1,4})[-. )]*(\d{1,4})[-. ]*(\d{1,9})$");
 
         /// <summary>
         /// Регулярное выражение для проверки электронной почты.
         /// </summary>
-        public static readonly Regex EmailRegex = new Regex(
-            @"^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$");
+        public static readonly Regex EmailRegex =
+            new Regex(@"^[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+$");
 
         /// <summary>
         /// Словарь ошибок данных.
@@ -205,9 +205,10 @@ namespace View.Model
             if (PhoneNumber.Length > MaxPhoneNumberLength
                 || !PhoneNumberRegex.IsMatch(PhoneNumber))
             {
-                _errors[nameof(Email)] = $"Электронная почта должна содержать '@', " +
-                                         $"иметь корректный формат и не превышать " +
-                                         $"{MaxEmailLength} символов.";
+                _errors[nameof(Email)] =
+                    $"Электронная почта должна содержать '@', " +
+                    $"иметь корректный формат и не превышать " +
+                    $"{MaxEmailLength} символов.";
             }
             else
             {
@@ -225,9 +226,10 @@ namespace View.Model
             if (Email.Length > MaxEmailLength
                 || !EmailRegex.IsMatch(Email))
             {
-                _errors[nameof(PhoneNumber)] = $"Номер телефона должен быть в формате " +
-                                               $"'+7 (999) 123-45-67' и не превышать " +
-                                               $"{MaxPhoneNumberLength} символов.";
+                _errors[nameof(PhoneNumber)] =
+                    $"Номер телефона должен быть в формате " +
+                    $"'+7 (999) 123-45-67' и не превышать " +
+                    $"{MaxPhoneNumberLength} символов.";
             }
             else
             {
