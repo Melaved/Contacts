@@ -205,10 +205,10 @@ namespace View.Model
             if (PhoneNumber.Length > MaxPhoneNumberLength
                 || !PhoneNumberRegex.IsMatch(PhoneNumber))
             {
-                _errors[nameof(Email)] =
-                    $"Электронная почта должна содержать '@', " +
-                    $"иметь корректный формат и не превышать " +
-                    $"{MaxEmailLength} символов.";
+                _errors[nameof(PhoneNumber)] =
+                    $"Номер телефона должен быть в формате " +
+                    $"'+7 (999) 123-45-67' и не превышать " +
+                    $"{MaxPhoneNumberLength} символов.";
             }
             else
             {
@@ -226,10 +226,10 @@ namespace View.Model
             if (Email.Length > MaxEmailLength
                 || !EmailRegex.IsMatch(Email))
             {
-                _errors[nameof(PhoneNumber)] =
-                    $"Номер телефона должен быть в формате " +
-                    $"'+7 (999) 123-45-67' и не превышать " +
-                    $"{MaxPhoneNumberLength} символов.";
+                _errors[nameof(Email)] =
+                    $"Электронная почта должна содержать '@', " +
+                    $"иметь корректный формат и не превышать " +
+                    $"{MaxEmailLength} символов.";
             }
             else
             {

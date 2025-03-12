@@ -21,6 +21,10 @@ namespace View.ViewModel
         /// </summary>
         private Contact _editingContact;
 
+        /// <summary>
+        /// Флаг, указывающий, находится ли контакт в режиме редактирования.
+        /// </summary>
+        private bool _isEditing;
 
         /// <summary>
         /// Событие для уведомления об изменении свойства.
@@ -31,7 +35,7 @@ namespace View.ViewModel
         /// Коллекция контактов, отображаемых в главном окне.
         /// </summary>
         public ObservableCollection<Contact> Contacts { get; set; } =
-            new (ContactSerializer.LoadContacts());
+            new(ContactSerializer.LoadContacts());
 
         /// <summary>
         /// Возвращает и задает выбранный контакт.
@@ -49,11 +53,6 @@ namespace View.ViewModel
                 _selectedContact = value;
                 OnPropertyChanged(nameof(SelectedContact));
                 EditingContact = _selectedContact?.Clone();
-                if (EditingContact != null)
-                {
-                    EditingContact.IsEditing = false;
-                }
-
                 OnPropertyChanged(nameof(IsContactSelected));
             }
         }
@@ -70,6 +69,23 @@ namespace View.ViewModel
                 {
                     _editingContact = value;
                     OnPropertyChanged(nameof(EditingContact));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Возвращает и задает флаг, указывающий, находится ли контакт в режиме редактирования.
+        /// </summary>
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                if (_isEditing != value)
+                {
+                    _isEditing = value;
+                    OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(CanApplyChanges));
                 }
             }
         }
@@ -104,43 +120,38 @@ namespace View.ViewModel
         /// </summary>
         /// <param name="parameter">Параметр команды.</param>
         /// <returns>True, если можно добавить контакт.</returns>
-        private bool CanAddContact(object parameter) => !IsEditingContact;
+        private bool CanAddContact(object parameter) => !IsEditing;
 
         /// <summary>
         /// Проверяет, можно ли редактировать контакт.
         /// </summary>
         /// <param name="parameter">Параметр команды.</param>
         /// <returns>True, если можно редактировать контакт.</returns>
-        private bool CanEditContact(object parameter) => IsContactSelected && !IsEditingContact;
+        private bool CanEditContact(object parameter) => IsContactSelected && !IsEditing;
 
         /// <summary>
         /// Проверяет, можно ли удалить контакт.
         /// </summary>
         /// <param name="parameter">Параметр команды.</param>
         /// <returns>True, если можно удалить контакт.</returns>
-        private bool CanRemoveContact(object parameter) => IsContactSelected && !IsEditingContact;
+        private bool CanRemoveContact(object parameter) => IsContactSelected && !IsEditing;
 
         /// <summary>
         /// Проверяет, можно ли применить изменения к контакту.
         /// </summary>
         /// <param name="parameter">Параметр команды.</param>
         /// <returns>True, если можно применить изменения.</returns>
-        private bool CanApplyChanges(object parameter) =>
-            IsEditingContact && EditingContact != null && !EditingContact.HasErrors;
-
-        /// <summary>
-        /// Определяет, находится ли контакт в режиме редактирования.
-        /// </summary>
-        private bool IsEditingContact => EditingContact?.IsEditing == true;
+        private bool CanApplyChanges(object parameter) => IsEditing && EditingContact != null && !EditingContact.HasErrors;
 
         /// <summary>
         /// Добавляет новый контакт в список.
         /// </summary>
         private void AddContact(object parameter)
         {
-            var newContact = new Contact { IsEditing = true, IsNewContact = true };
+            var newContact = new Contact { IsNewContact = true };
             EditingContact = newContact;
             SelectedContact = null;
+            IsEditing = true;
         }
 
         /// <summary>
@@ -154,9 +165,7 @@ namespace View.ViewModel
             }
 
             EditingContact = SelectedContact.Clone();
-            EditingContact.IsEditing = true;
-            EditingContact.IsNewContact = false;
-            OnPropertyChanged(nameof(EditingContact));
+            IsEditing = true;
         }
 
         /// <summary>
@@ -199,6 +208,7 @@ namespace View.ViewModel
             }
 
             SelectedContact = EditingContact;
+            IsEditing = false;
             ContactSerializer.SaveContacts(Contacts);
         }
 

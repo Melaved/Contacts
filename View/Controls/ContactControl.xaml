@@ -61,7 +61,7 @@
             Margin="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBooleanConverter}}"
+            IsReadOnly="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBooleanConverter}}"
             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
         <!--  Phone Number  -->
@@ -77,7 +77,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             DataObject.Pasting="PhoneNumber_Pasting"
-            IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBooleanConverter}}"
+            IsReadOnly="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBooleanConverter}}"
             PreviewTextInput="PhoneNumber_PreviewTextInput"
             Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
@@ -93,7 +93,7 @@
             Margin="3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            IsReadOnly="{Binding IsEditing, Converter={StaticResource InverseBooleanConverter}}"
+            IsReadOnly="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBooleanConverter}}"
             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
         <!--  Кнопка Apply  -->
@@ -107,7 +107,7 @@
             VerticalAlignment="Top"
             Command="{Binding DataContext.ApplyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
             Content="Apply"
-            IsEnabled="{Binding DataContext.CanApply, RelativeSource={RelativeSource AncestorType=Window}}"
-            Visibility="{Binding DataContext.IsEditingContact, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            IsEnabled="{Binding DataContext.CanApplyChanges, RelativeSource={RelativeSource AncestorType=Window}}"
+            Visibility="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
