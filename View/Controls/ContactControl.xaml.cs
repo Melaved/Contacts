@@ -2,12 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using View.Model;
 
 namespace View.Controls
 {
     /// <summary>
     /// Логика взаимодействия для ContactControl.xaml
-    /// Контрол для отображения и ввода контактной информации.
+    /// Элемент управления для отображения и ввода контактной информации.
     /// </summary>
     public partial class ContactControl : UserControl
     {
@@ -27,9 +28,10 @@ namespace View.Controls
         /// <param name="e">Аргументы события, содержащие введённый текст.</param>
         private void PhoneNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var regex = new Regex(@"^[0-9+() -]*$");
+            var textBox = sender as TextBox;
+            var newText = textBox.Text.Insert(textBox.CaretIndex, e.Text);
 
-            if (!regex.IsMatch(e.Text))
+            if (!Contact.StrictPhoneNumberRegex.IsMatch(newText))
             {
                 e.Handled = true;
             }
@@ -43,18 +45,14 @@ namespace View.Controls
         /// <param name="e">Аргументы события, содержащие вставляемый текст.</param>
         private void PhoneNumber_Pasting(object sender, DataObjectPastingEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(typeof(string)))
+            if (!e.DataObject.GetDataPresent(typeof(string)))
             {
-                var text = (string)e.DataObject.GetData(typeof(string));
-
-                var regex = new Regex(@"^[0-9+() -]*$");
-
-                if (!regex.IsMatch(text))
-                {
-                    e.CancelCommand();
-                }
+                e.CancelCommand();
+                return;
             }
-            else
+
+            var text = (string)e.DataObject.GetData(typeof(string));
+            if (!Contact.StrictPhoneNumberRegex.IsMatch(text))
             {
                 e.CancelCommand();
             }

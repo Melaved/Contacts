@@ -10,6 +10,27 @@ namespace View.Model
     public class Contact : INotifyPropertyChanged, INotifyDataErrorInfo
     {
         /// <summary>
+        /// Максимальная длина имени контакта.
+        /// </summary>
+        private const int MaxNameLength = 100;
+
+        /// <summary>
+        /// Максимальная длина номера телефона.
+        /// </summary>
+        private const int MaxPhoneNumberLength = 100;
+
+        /// <summary>
+        /// Максимальная длина электронной почты.
+        /// </summary>
+        private const int MaxEmailLength = 100;
+
+        /// <summary>
+        /// Регулярное выражение для проверки номера телефона.
+        /// </summary>
+        public static readonly Regex SimplePhoneNumberRegex = new Regex(@"^[0-9+() -]*$");
+        public static readonly Regex StrictPhoneNumberRegex = new Regex(@"^\+?(\d{1,3})?[-. (]*(\d{1,4})[-. )]*(\d{1,4})[-. ]*(\d{1,9})$");
+
+        /// <summary>
         /// Словарь ошибок данных.
         /// </summary>
         private readonly Dictionary<string, string> _errors = new();
@@ -33,7 +54,6 @@ namespace View.Model
         /// Флаг, указывающий, находится ли контакт в режиме редактирования.
         /// </summary>
         private bool _isEditing;
-
 
         /// <summary>
         /// Создает новый экземпляр класса <see cref="Contact"/> с заданными параметрами.
@@ -154,9 +174,9 @@ namespace View.Model
         /// </summary>
         private void ValidateName()
         {
-            if (Name.Length > 100)
+            if (Name.Length > MaxNameLength)
             {
-                _errors[nameof(Name)] = "Имя не может превышать 100 символов.";
+                _errors[nameof(Name)] = $"Имя не может превышать {MaxNameLength} символов.";
             }
             else
             {
@@ -171,12 +191,11 @@ namespace View.Model
         /// </summary>
         private void ValidatePhoneNumber()
         {
-            if (PhoneNumber.Length > 100
-                || !Regex.IsMatch(PhoneNumber, "^[0-9+() -]*$"))
+            if (PhoneNumber.Length > MaxPhoneNumberLength
+                || !Contact.StrictPhoneNumberRegex.IsMatch(PhoneNumber))
             {
-                _errors[nameof(PhoneNumber)] = "Номер телефона должен содержать "
-                                               + "только цифры и символы '+-()' "
-                                               + "и не превышать 100 символов.";
+                _errors[nameof(PhoneNumber)] = $"Номер телефона должен быть в формате '+7 (999) 123-45-67' "
+                                               + $"и не превышать {MaxPhoneNumberLength} символов.";
             }
             else
             {
@@ -191,10 +210,12 @@ namespace View.Model
         /// </summary>
         private void ValidateEmail()
         {
-            if (Email.Length > 100 || !Email.Contains("@"))
+            if (Email.Length > MaxEmailLength
+                || !Regex.IsMatch(Email, @"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+"))
             {
-                _errors[nameof(Email)] = "Электронная почта должна содержать"
-                                         + " '@' и не превышать 100 символов.";
+                _errors[nameof(Email)] = $"Электронная почта должна содержать '@', "
+                                         + $"иметь корректный формат и не превышать "
+                                         + $"{MaxEmailLength} символов.";
             }
             else
             {
@@ -212,7 +233,8 @@ namespace View.Model
         {
             return new Contact(Name, PhoneNumber, Email)
             {
-                IsEditing = this.IsEditing, IsNewContact = this.IsNewContact
+                IsEditing = this.IsEditing,
+                IsNewContact = this.IsNewContact
             };
         }
 

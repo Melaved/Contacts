@@ -41,28 +41,26 @@ namespace View.ViewModel
             get => _selectedContact;
             set
             {
-                if (_selectedContact != value)
+                if (_selectedContact == value)
                 {
-                    _selectedContact = value;
-                    OnPropertyChanged(nameof(SelectedContact));
-
-                    if (_selectedContact != null)
-                    {
-                        EditingContact = _selectedContact.Clone();
-                        EditingContact.IsEditing = false;
-                    }
-                    else
-                    {
-                        EditingContact = null;
-                    }
-
-                    OnPropertyChanged(nameof(IsContactSelected));
+                    return;
                 }
+
+                _selectedContact = value;
+                OnPropertyChanged(nameof(SelectedContact));
+
+                EditingContact = _selectedContact?.Clone();
+                if (EditingContact != null)
+                {
+                    EditingContact.IsEditing = false;
+                }
+
+                OnPropertyChanged(nameof(IsContactSelected));
             }
         }
 
         /// <summary>
-        /// Возврашает и задает контакт, который редактируется в данный момент.
+        /// Возвращает и задает контакт, который редактируется в данный момент.
         /// </summary>
         public Contact EditingContact
         {
@@ -128,9 +126,8 @@ namespace View.ViewModel
         /// </summary>
         /// <param name="parameter">Параметр команды.</param>
         /// <returns>True, если можно применить изменения.</returns>
-        private bool CanApplyChanges(object parameter) => IsEditingContact 
-                                                          && EditingContact != null 
-                                                          && !EditingContact.HasErrors;
+        private bool CanApplyChanges(object parameter) =>
+            IsEditingContact && EditingContact != null && !EditingContact.HasErrors;
 
         /// <summary>
         /// Определяет, находится ли контакт в режиме редактирования.
@@ -179,26 +176,25 @@ namespace View.ViewModel
         /// </summary>
         private void ApplyChanges(object parameter)
         {
-            if (EditingContact != null && !EditingContact.HasErrors)
+            if (EditingContact == null || EditingContact.HasErrors)
+                return;
+
+            if (EditingContact.IsNewContact)
             {
-                if (EditingContact.IsNewContact)
-                {
-                    EditingContact.IsNewContact = false;
-                    Contacts.Add(EditingContact);
-                }
-                else if (SelectedContact != null)
-                {
-                    var index = Contacts.IndexOf(SelectedContact);
-
-                    if (index >= 0)
-                    {
-                        Contacts[index] = EditingContact;
-                    }
-                }
-
-                SelectedContact = EditingContact;
-                ContactSerializer.SaveContacts(Contacts);
+                EditingContact.IsNewContact = false;
+                Contacts.Add(EditingContact);
             }
+            else if (SelectedContact != null)
+            {
+                var index = Contacts.IndexOf(SelectedContact);
+                if (index >= 0)
+                {
+                    Contacts[index] = EditingContact;
+                }
+            }
+
+            SelectedContact = EditingContact;
+            ContactSerializer.SaveContacts(Contacts);
         }
 
         /// <summary>
