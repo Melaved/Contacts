@@ -2,12 +2,11 @@
     x:Class="View.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:View.Controls"
     xmlns:converters="clr-namespace:View.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:View.Model"
-    xmlns:viewmodel="clr-namespace:View.ViewModel"
     Title="Contacts"
     Width="525"
     Height="400"
@@ -19,8 +18,18 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+
+        <!--  DataTemplate для списка контактов  -->
+        <DataTemplate x:Key="ContactTemplate">
+            <StackPanel Margin="3">
+                <TextBlock
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Text="{Binding Name}"/>
+                <TextBlock FontSize="10" Text="{Binding PhoneNumber}"/>
+            </StackPanel>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -53,8 +62,8 @@
                     VerticalAlignment="Center"
                     Text="Find:"/>
                 <TextBox
-                    Grid.ColumnSpan="2"
-                    Margin="30 0 0 0"
+                    Grid.Column="1"
+                    Margin="0 0 0 0"
                     VerticalAlignment="Center"/>
             </Grid>
 
@@ -62,14 +71,9 @@
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <ListBox
                     Margin="0 8 0 8"
+                    ItemTemplate="{StaticResource ContactTemplate}"
                     ItemsSource="{Binding Contacts}"
-                    SelectedItem="{Binding SelectedContact, Mode=TwoWay}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Margin="3" Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    SelectedItem="{Binding SelectedContact, Mode=TwoWay}"/>
             </ScrollViewer>
 
             <!--  Кнопки управления  -->
@@ -90,7 +94,7 @@
                     Margin="3 3 3 3"
                     Command="{Binding AddCommand}"
                     Content="Add"
-                    IsEnabled="{Binding IsApplyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Invert}"/>
+                    IsEnabled="{Binding IsEditingContact, Converter={StaticResource InverseBooleanConverter}}"/>
                 <Button
                     Grid.RowSpan="2"
                     Grid.Column="1"
@@ -119,94 +123,9 @@
             Background="Gray"/>
 
         <!--  Правая панель  -->
-        <Grid Grid.Column="2" Margin="8">
-            <Grid.BindingGroup>
-                <BindingGroup x:Name="ContactBindingGroup"/>
-            </Grid.BindingGroup>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <!--  Изображение  -->
-            <Image
-                Grid.Row="0"
-                Grid.RowSpan="6"
-                Grid.Column="0"
-                Width="100"
-                Height="100"
-                Margin="0 20 8 0"
-                VerticalAlignment="Top"
-                Source="\Resources\photo_placeholder_100x100.png"/>
-
-            <!--  Поля для ввода данных  -->
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                Text="Name:"/>
-            <TextBox
-                x:Name="NameTextBox"
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="3"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                IsReadOnly="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
-                Text="{Binding SelectedContact.Name, UpdateSourceTrigger=Explicit}"/>
-
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                Text="Phone Number:"/>
-            <TextBox
-                x:Name="PhoneNumberTextBox"
-                Grid.Row="3"
-                Grid.Column="1"
-                Margin="3"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                IsReadOnly="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
-                Text="{Binding SelectedContact.PhoneNumber, UpdateSourceTrigger=Explicit}"/>
-
-            <TextBlock
-                Grid.Row="4"
-                Grid.Column="1"
-                VerticalAlignment="Center"
-                Text="Email:"/>
-            <TextBox
-                x:Name="EmailTextBox"
-                Grid.Row="5"
-                Grid.Column="1"
-                Margin="3"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center"
-                IsReadOnly="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"
-                Text="{Binding SelectedContact.Email, UpdateSourceTrigger=Explicit}"/>
-
-            <!--  Кнопка Apply  -->
-            <Button
-                Grid.Row="6"
-                Grid.Column="1"
-                Width="75"
-                Height="25"
-                Margin="0 50 0 0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Command="{Binding ApplyCommand}"
-                CommandParameter="{Binding ElementName=ContactBindingGroup}"
-                Content="Apply"
-                Visibility="{Binding IsApplyButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        </Grid>
+        <controls:ContactControl
+            Grid.Column="2"
+            Margin="8"
+            DataContext="{Binding EditingContact}"/>
     </Grid>
 </Window>
