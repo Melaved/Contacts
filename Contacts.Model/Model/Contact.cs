@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace View.Model
+namespace Contacts.Model.Model
 {
     /// <summary>
     /// Класс, представляющий контакт с именем, номером телефона и электронной почтой.

@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace View.Converters
+namespace Contacts.View.Converters
 {
     /// <summary>
     /// Конвертер, который инвертирует значение типа <see cref="bool"/>.

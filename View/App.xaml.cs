@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace View
+namespace Contacts.Model.Services.ViewModel.ViewModel
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using View.Model;
+using Contacts.Model.Model;
 
-namespace View.Controls
+namespace Contacts.View.Controls
 {
     /// <summary>
     /// Логика взаимодействия для ContactControl.xaml

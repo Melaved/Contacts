@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="View.App"
+    x:Class="Contacts.Model.Services.ViewModel.ViewModel.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:View"
+    xmlns:local="clr-namespace:Contacts.Model.Services.ViewModel.ViewModel"
     StartupUri="MainWindow.xaml">
     <Application.Resources>
 

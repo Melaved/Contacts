@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using View.ViewModel;
+using Contacts.ViewModel.ViewModel;
 
-namespace View
+namespace Contacts.View
 {
     /// <summary>
     /// Главное окно приложения.

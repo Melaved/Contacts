@@ -1,7 +1,6 @@
-﻿using System.IO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace View.Model.Services
+namespace Contacts.Model.Model.Services
 {
     /// <summary>
     /// Предоставляет методы для сериализации и десериализации списка контактов в формате JSON.
