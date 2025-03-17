@@ -207,7 +207,7 @@ namespace Contacts.Model
             {
                 _errors[nameof(PhoneNumber)] =
                     $"Номер телефона должен быть в формате " +
-                    $"'+7 (999) 123-45-67' и не превышать " +
+                    $"'+7 (999) 123 4567' и не превышать " +
                     $"{MaxPhoneNumberLength} символов.";
             }
             else

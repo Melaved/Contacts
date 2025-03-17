@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Contacts.Model;
 using Contacts.Model.Services;
 
-namespace Contacts.ViewModel.ViewModel
+namespace Contacts.ViewModel
 {
     /// <summary>
     /// Основной ViewModel для управления контактами.
@@ -42,13 +42,6 @@ namespace Contacts.ViewModel.ViewModel
         public MainVM()
         {
             FilteredContacts = new ObservableCollection<Contact>(Contacts);
-            PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName == nameof(SearchText))
-                {
-                    UpdateFilteredContacts();
-                }
-            };
         }
 
         /// <summary>
@@ -105,6 +98,15 @@ namespace Contacts.ViewModel.ViewModel
         }
 
         /// <summary>
+        /// Вызывается при изменении текста поиска.
+        /// </summary>
+        /// <param name="value">Новый текст поиска.</param>
+        partial void OnSearchTextChanged(string value)
+        {
+            UpdateFilteredContacts();
+        }
+
+        /// <summary>
         /// Обновляет список отфильтрованных контактов в зависимости от текста поиска.
         /// </summary>
         private void UpdateFilteredContacts()
@@ -147,7 +149,7 @@ namespace Contacts.ViewModel.ViewModel
         /// Проверяет, можно ли применить изменения к контакту.
         /// </summary>
         /// <returns>True, если можно применить изменения.</returns>
-        private bool CanApplyChanges() => 
+        private bool CanApplyChanges() =>
             IsEditing && EditingContact != null && !EditingContact.HasErrors;
 
         /// <summary>
