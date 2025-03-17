@@ -62,7 +62,8 @@
                 <TextBox
                     Grid.Column="1"
                     Margin="0 0 0 0"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
             <!--  Список контактов с прокруткой  -->
@@ -70,7 +71,7 @@
                 <ListBox
                     Margin="0 8 0 8"
                     ItemTemplate="{StaticResource ContactTemplate}"
-                    ItemsSource="{Binding Contacts}"
+                    ItemsSource="{Binding FilteredContacts}"
                     SelectedItem="{Binding SelectedContact, Mode=TwoWay}"/>
             </ScrollViewer>
 

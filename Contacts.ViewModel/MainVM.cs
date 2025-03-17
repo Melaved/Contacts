@@ -31,6 +31,32 @@ namespace Contacts.ViewModel.ViewModel
         private bool _isEditing;
 
         /// <summary>
+        /// Текст поиска.
+        /// </summary>
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        /// <summary>
+        /// Создает экземпляр ViewModel и инициализирует коллекции.
+        /// </summary>
+        public MainVM()
+        {
+            FilteredContacts = new ObservableCollection<Contact>(Contacts);
+            PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(SearchText))
+                {
+                    UpdateFilteredContacts();
+                }
+            };
+        }
+
+        /// <summary>
+        /// Коллекция отфильтрованных контактов.
+        /// </summary>
+        public ObservableCollection<Contact> FilteredContacts { get; }
+
+        /// <summary>
         /// Коллекция контактов, отображаемых в главном окне.
         /// </summary>
         public ObservableCollection<Contact> Contacts { get; set; } =
@@ -76,6 +102,22 @@ namespace Contacts.ViewModel.ViewModel
         {
             OnPropertyChanged(nameof(CanApplyChanges));
             UpdateCommandStates();
+        }
+
+        /// <summary>
+        /// Обновляет список отфильтрованных контактов в зависимости от текста поиска.
+        /// </summary>
+        private void UpdateFilteredContacts()
+        {
+            FilteredContacts.Clear();
+            foreach (var contact in Contacts)
+            {
+                if (string.IsNullOrEmpty(SearchText) ||
+                    contact.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                {
+                    FilteredContacts.Add(contact);
+                }
+            }
         }
 
         /// <summary>
@@ -149,6 +191,7 @@ namespace Contacts.ViewModel.ViewModel
             Contacts.Remove(SelectedContact);
             ContactSerializer.SaveContacts(Contacts);
             SelectedContact = Contacts.Count > 0 ? Contacts[0] : null;
+            UpdateFilteredContacts();
         }
 
         /// <summary>
@@ -179,6 +222,7 @@ namespace Contacts.ViewModel.ViewModel
             SelectedContact = EditingContact;
             IsEditing = false;
             ContactSerializer.SaveContacts(Contacts);
+            UpdateFilteredContacts();
         }
 
         /// <summary>
