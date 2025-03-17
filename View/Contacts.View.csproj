@@ -14,11 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Contacts.Model\Contacts.Model.csproj" />
     <ProjectReference Include="..\Contacts.ViewModel\Contacts.ViewModel.csproj" />
   </ItemGroup>

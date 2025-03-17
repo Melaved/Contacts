@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace Contacts.Model.Model
+namespace Contacts.Model
 {
     /// <summary>
     /// Класс, представляющий контакт с именем, номером телефона и электронной почтой.
@@ -247,8 +247,8 @@ namespace Contacts.Model.Model
         {
             return new Contact(Name, PhoneNumber, Email)
             {
-                IsEditing = this.IsEditing,
-                IsNewContact = this.IsNewContact
+                IsEditing = IsEditing,
+                IsNewContact = IsNewContact
             };
         }
 

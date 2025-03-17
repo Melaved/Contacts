@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Contacts.Model.Model;
+using Contacts.Model;
 
 namespace Contacts.View.Controls
 {

@@ -1,8 +1,6 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 
-namespace Contacts.Model.Services.ViewModel.ViewModel
+namespace Contacts.View
 {
     /// <summary>
     /// Interaction logic for App.xaml

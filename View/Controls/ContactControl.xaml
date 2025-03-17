@@ -107,7 +107,6 @@
             VerticalAlignment="Top"
             Command="{Binding DataContext.ApplyChangesCommand, RelativeSource={RelativeSource AncestorType=Window}}"
             Content="Apply"
-            IsEnabled="{Binding DataContext.CanApplyChanges, RelativeSource={RelativeSource AncestorType=Window}}"
             Visibility="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

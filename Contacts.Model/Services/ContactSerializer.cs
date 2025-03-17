@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Contacts.Model.Model.Services
+namespace Contacts.Model.Services
 {
     /// <summary>
     /// Предоставляет методы для сериализации и десериализации списка контактов в формате JSON.

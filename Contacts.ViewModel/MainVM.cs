@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Contacts.Model.Model;
-using Contacts.Model.Model.Services;
+using Contacts.Model;
+using Contacts.Model.Services;
 
 namespace Contacts.ViewModel.ViewModel
 {
@@ -37,7 +37,7 @@ namespace Contacts.ViewModel.ViewModel
             new(ContactSerializer.LoadContacts());
 
         /// <summary>
-        /// Вызывается при измении выбранного контакта.
+        /// Вызывается при изменении выбранного контакта.
         /// </summary>
         /// <param name="value">Новый выбранный контакт.</param>
         partial void OnSelectedContactChanged(Contact value)
@@ -71,7 +71,7 @@ namespace Contacts.ViewModel.ViewModel
         /// <summary>
         /// Вызывается при изменении флага редактирования контакта.
         /// </summary>
-        /// <param name="value">Новое значение флага редактировани.</param>
+        /// <param name="value">Новое значение флага редактирования.</param>
         partial void OnIsEditingChanged(bool value)
         {
             OnPropertyChanged(nameof(CanApplyChanges));
@@ -105,7 +105,8 @@ namespace Contacts.ViewModel.ViewModel
         /// Проверяет, можно ли применить изменения к контакту.
         /// </summary>
         /// <returns>True, если можно применить изменения.</returns>
-        private bool CanApplyChanges() => IsEditing && EditingContact != null && !EditingContact.HasErrors;
+        private bool CanApplyChanges() => 
+            IsEditing && EditingContact != null && !EditingContact.HasErrors;
 
         /// <summary>
         /// Добавляет новый контакт в список.
