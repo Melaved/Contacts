@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace View.Model
+namespace Contacts.Model
 {
     /// <summary>
     /// Класс, представляющий контакт с именем, номером телефона и электронной почтой.
@@ -207,7 +207,7 @@ namespace View.Model
             {
                 _errors[nameof(PhoneNumber)] =
                     $"Номер телефона должен быть в формате " +
-                    $"'+7 (999) 123-45-67' и не превышать " +
+                    $"'+7 (999) 123 4567' и не превышать " +
                     $"{MaxPhoneNumberLength} символов.";
             }
             else
@@ -247,8 +247,8 @@ namespace View.Model
         {
             return new Contact(Name, PhoneNumber, Email)
             {
-                IsEditing = this.IsEditing,
-                IsNewContact = this.IsNewContact
+                IsEditing = IsEditing,
+                IsNewContact = IsNewContact
             };
         }
 
