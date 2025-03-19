@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
@@ -7,7 +8,7 @@ namespace Contacts.Model
     /// <summary>
     /// Класс, представляющий контакт с именем, номером телефона и электронной почтой.
     /// </summary>
-    public class Contact : INotifyPropertyChanged, INotifyDataErrorInfo
+    public partial class Contact : ObservableObject, INotifyDataErrorInfo
     {
         /// <summary>
         /// Максимальная длина имени контакта.
@@ -49,22 +50,20 @@ namespace Contacts.Model
         /// <summary>
         /// Имя контакта.
         /// </summary>
+        [ObservableProperty]
         private string _name;
 
         /// <summary>
         /// Номер телефона контакта.
         /// </summary>
+        [ObservableProperty]
         private string _phoneNumber;
 
         /// <summary>
         /// Электронная почта контакта.
         /// </summary>
+        [ObservableProperty]
         private string _email;
-
-        /// <summary>
-        /// Флаг, указывающий, находится ли контакт в режиме редактирования.
-        /// </summary>
-        private bool _isEditing;
 
         /// <summary>
         /// Создает новый экземпляр класса <see cref="Contact"/> с заданными параметрами.
@@ -90,82 +89,32 @@ namespace Contacts.Model
         }
 
         /// <summary>
-        /// Событие, возникающее при изменении свойства.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
         /// Событие, возникающее при изменении ошибок данных.
         /// </summary>
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         /// <summary>
-        /// Возвращает и задает флаг, указывающий, находится ли контакт в режиме редактирования.
-        /// </summary>
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
-            {
-                if (_isEditing != value)
-                {
-                    _isEditing = value;
-                    OnPropertyChanged(nameof(IsEditing));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Возвращает и задает флаг, указывающий, является ли контакт новым.
-        /// </summary>
-        public bool IsNewContact { get; set; } = true;
-
-        /// <summary>
-        /// Возвращает и задает имя контакта.
-        /// </summary>
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                ValidateName();
-                OnPropertyChanged(nameof(Name));
-            }
-        }
-
-        /// <summary>
-        /// Возвращает и задает номер телефона контакта.
-        /// </summary>
-        public string PhoneNumber
-        {
-            get => _phoneNumber;
-            set
-            {
-                _phoneNumber = value;
-                ValidatePhoneNumber();
-                OnPropertyChanged(nameof(PhoneNumber));
-            }
-        }
-
-        /// <summary>
-        /// Возвращает и задает электронную почту контакта.
-        /// </summary>
-        public string Email
-        {
-            get => _email;
-            set
-            {
-                _email = value;
-                ValidateEmail();
-                OnPropertyChanged(nameof(Email));
-            }
-        }
-
-        /// <summary>
         /// Определяет, содержит ли контакт ошибки.
         /// </summary>
         public bool HasErrors => _errors.Count > 0;
+
+        /// <summary>
+        /// Вызывается при изменении имени контакта и выполняет его валидацию.
+        /// </summary>
+        /// <param name="value">Новое значение имени.</param>
+        partial void OnNameChanged(string value) => ValidateName();
+
+        /// <summary>
+        /// Вызывается при изменении номера телефона контакта и выполняет его валидацию.
+        /// </summary>
+        /// <param name="value">Новое значение номера телефона.</param>
+        partial void OnPhoneNumberChanged(string value) => ValidatePhoneNumber();
+
+        /// <summary>
+        /// Вызывается при изменении электронной почты контакта и выполняет ее валидацию.
+        /// </summary>
+        /// <param name="value">Новое значение электронной почты.</param>
+        partial void OnEmailChanged(string value) => ValidateEmail();
 
         /// <summary>
         /// Получает ошибки для указанного свойства.
@@ -245,20 +194,12 @@ namespace Contacts.Model
         /// <returns>Копия контакта.</returns>
         public Contact Clone()
         {
-            return new Contact(Name, PhoneNumber, Email)
+            return new Contact
             {
-                IsEditing = IsEditing,
-                IsNewContact = IsNewContact
+                Name = Name,
+                PhoneNumber = PhoneNumber,
+                Email = Email
             };
-        }
-
-        /// <summary>
-        /// Вызывает событие <see cref="PropertyChanged"/>, уведомляя об изменении свойства.
-        /// </summary>
-        /// <param name="propertyName">Имя измененного свойства.</param>
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

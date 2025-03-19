@@ -31,6 +31,12 @@ namespace Contacts.ViewModel
         private bool _isEditing;
 
         /// <summary>
+        /// Флаг, указывающий, является ли контакт новым.
+        /// </summary>
+        [ObservableProperty]
+        private bool _isNewContact;
+
+        /// <summary>
         /// Текст поиска.
         /// </summary>
         [ObservableProperty]
@@ -158,10 +164,11 @@ namespace Contacts.ViewModel
         [RelayCommand(CanExecute = nameof(CanAddContact))]
         private void AddContact()
         {
-            var newContact = new Contact { IsNewContact = true };
+            var newContact = new Contact();
             SelectedContact = null;
             EditingContact = newContact;
             IsEditing = true;
+            IsNewContact = true;
         }
 
         /// <summary>
@@ -170,13 +177,9 @@ namespace Contacts.ViewModel
         [RelayCommand(CanExecute = nameof(CanEditContact))]
         private void EditContact()
         {
-            if (SelectedContact == null)
-            {
-                return;
-            }
-
             EditingContact = SelectedContact.Clone();
             IsEditing = true;
+            IsNewContact = false;
         }
 
         /// <summary>
@@ -185,15 +188,20 @@ namespace Contacts.ViewModel
         [RelayCommand(CanExecute = nameof(CanRemoveContact))]
         private void RemoveContact()
         {
-            if (SelectedContact == null)
-            {
-                return;
-            }
-
+            var index = Contacts.IndexOf(SelectedContact);
             Contacts.Remove(SelectedContact);
             ContactSerializer.SaveContacts(Contacts);
-            SelectedContact = Contacts.Count > 0 ? Contacts[0] : null;
             UpdateFilteredContacts();
+
+            if (Contacts.Count > 0)
+            {
+                SelectedContact =
+                    index < Contacts.Count ? Contacts[index] : Contacts[Contacts.Count - 1];
+            }
+            else
+            {
+                SelectedContact = null;
+            }
         }
 
         /// <summary>
@@ -202,15 +210,10 @@ namespace Contacts.ViewModel
         [RelayCommand(CanExecute = nameof(CanApplyChanges))]
         private void ApplyChanges()
         {
-            if (EditingContact == null || EditingContact.HasErrors)
+            if (IsNewContact)
             {
-                return;
-            }
-
-            if (EditingContact.IsNewContact)
-            {
-                EditingContact.IsNewContact = false;
                 Contacts.Add(EditingContact);
+                IsNewContact = false;
             }
             else if (SelectedContact != null)
             {
