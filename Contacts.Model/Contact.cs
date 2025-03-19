@@ -89,11 +89,6 @@ namespace Contacts.Model
         }
 
         /// <summary>
-        /// Событие, возникающее при изменении свойства.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
         /// Событие, возникающее при изменении ошибок данных.
         /// </summary>
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
@@ -205,15 +200,6 @@ namespace Contacts.Model
                 PhoneNumber = PhoneNumber,
                 Email = Email
             };
-        }
-
-        /// <summary>
-        /// Вызывает событие <see cref="PropertyChanged"/>, уведомляя об изменении свойства.
-        /// </summary>
-        /// <param name="propertyName">Имя измененного свойства.</param>
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
